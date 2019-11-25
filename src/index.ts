@@ -4,7 +4,49 @@
  */
 import { ForwardRef, isMemo } from "react-is";
 
-const REACT_STATICS = {
+
+export interface ReactStatics {
+  childContextTypes: true;
+  contextType: true;
+  contextTypes: true;
+  defaultProps: true;
+  displayName: true;
+  getDefaultProps: true;
+  getDerivedStateFromError: true;
+  getDerivedStateFromProps: true;
+  mixins: true;
+  propTypes: true;
+  type: true;
+}
+
+export interface KnownStatics {
+  name: true;
+  length: true;
+  prototype: true;
+  caller: true;
+  callee: true;
+  arguments: true;
+  arity: true;
+}
+
+export interface MemoStatics {
+  '$$typeof': true;
+  compare: true;
+  defaultProps: true;
+  displayName: true;
+  propTypes: true;
+  type: true;
+}
+
+export interface ForwardRefStatics {
+  '$$typeof': true;
+  render: true;
+  defaultProps: true;
+  displayName: true;
+  propTypes: true;
+}
+
+const REACT_STATICS: ReactStatics = {
   childContextTypes: true,
   contextType: true,
   contextTypes: true,
@@ -18,7 +60,7 @@ const REACT_STATICS = {
   type: true
 };
 
-const KNOWN_STATICS = {
+ const KNOWN_STATICS: KnownStatics = {
   name: true,
   length: true,
   prototype: true,
@@ -28,7 +70,7 @@ const KNOWN_STATICS = {
   arity: true
 };
 
-const FORWARD_REF_STATICS = {
+const FORWARD_REF_STATICS: ForwardRefStatics = {
   $$typeof: true,
   render: true,
   defaultProps: true,
@@ -36,13 +78,29 @@ const FORWARD_REF_STATICS = {
   propTypes: true
 };
 
-const MEMO_STATICS = {
+const MEMO_STATICS: MemoStatics = {
   $$typeof: true,
   compare: true,
   defaultProps: true,
   displayName: true,
   propTypes: true,
   type: true
+};
+
+export type NonReactStatics<
+  S extends React.ComponentType<any>,
+  C extends {
+    [key: string]: true;
+  } = {}
+> = {
+  [key in Exclude<
+    keyof S,
+    S extends React.MemoExoticComponent<any>
+      ? keyof MemoStatics | keyof C
+      : S extends React.ForwardRefExoticComponent<any>
+      ? keyof ForwardRefStatics | keyof C
+      : keyof ReactStatics | keyof KnownStatics | keyof C
+  >]: S[key];
 };
 
 const TYPE_STATICS = {};

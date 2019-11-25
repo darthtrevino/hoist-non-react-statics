@@ -1,6 +1,6 @@
 {
   "name": "hoist-non-react-statics-x",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "Copies non-react specific statics from a child component to a parent component",
   "main": "dist/index.js",
   "module": "dist/hoist-non-react-statics-x.esm.js",
